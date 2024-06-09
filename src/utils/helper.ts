@@ -1,3 +1,5 @@
+import { Request } from "express";
+
 export function generateUniqueHash(length = 8) {
   const characters =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -9,6 +11,8 @@ export function generateUniqueHash(length = 8) {
   return result;
 }
 
-export function generateShortUrl(key: string): string {
-  return process.env.DOMAIN + key;
+export function generateShortUrl(req: Request, key: string): string {
+   // Construct the full URL
+   const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  return fullUrl + key;
 }

@@ -14,27 +14,14 @@ export async function checkLongUrlExists(
       .select({ key: urls.key, shortUrl: urls.shortUrl, longUrl: urls.longUrl })
       .from(urls)
       .where(eq(urls.longUrl, longUrl));
-    console.log("data", data);
-    if (data.length === 0) {
-      next();
+    if (data.length === 0 || typeof data === undefined) {
+      return next();
     }
     const { key, shortUrl } = data[0];
     return res.send({ key, shortUrl, longUrl });
   } catch (error) {
-    console.log(error);
-    return res.send("something went wrong in checking long url exists");
+    console.error(error);
+    return res.status(400).send("something went wrong in checking long url exists");
   }
 }
 
-export async function checkLongUrlExists2(longUrl: string): Promise<boolean> {
-  const data = await db
-    .select({ key: urls.key, shortUrl: urls.shortUrl, longUrl: urls.longUrl })
-    .from(urls)
-    .where(eq(urls.longUrl, longUrl));
-  console.log("data", data);
-  if (data.length === 0) {
-    return false;
-  } else {
-    return true;
-  }
-}
